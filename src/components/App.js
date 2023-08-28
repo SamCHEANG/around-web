@@ -1,25 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "../assets/logo.svg";
+import TopBar from "./TopBar";
+import Main from "./Main";
+import { useState } from "react";
+import { config } from "../constants.js";
 
-function App() {
+const App = () => {
+  const [isLoggedIn, setLoggedIn] = useState(
+    !!localStorage.getItem(config.TOKEN_KEY)
+  );
+
+  const logout = () => {
+    console.log("log out");
+    localStorage.removeItem(config.TOKEN_KEY);
+    setLoggedIn(false);
+  };
+
+  const loggedIn = (token) => {
+    if (token) {
+      localStorage.setItem(config.TOKEN_KEY, token);
+      setLoggedIn(true);
+    }
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <TopBar isLoggedIn={isLoggedIn} handleLogout={logout} />
+      <Main isLoggedIn={isLoggedIn} handleLoggedIn={loggedIn} />
     </div>
   );
-}
+};
 
 export default App;
